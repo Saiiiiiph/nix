@@ -75,7 +75,7 @@
       discord
       filezilla
       git
-      stable.vscode  # Maintenant disponible via l'overlay
+      vscode  # Maintenant disponible via l'overlay
     ];
   };
 
