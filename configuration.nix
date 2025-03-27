@@ -73,7 +73,7 @@
       kdePackages.kate
       spotify
       discord
-      filezilla
+      stable.filezilla
       git
       vscode  # Maintenant disponible via l'overlay
     ];
