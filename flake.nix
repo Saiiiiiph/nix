@@ -10,9 +10,9 @@
     nixosConfigurations = {
       nixos = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
-        specialArgs = { inherit inputs; };  # ← Passe `inputs` ici
+        specialArgs = { inherit inputs; };  # Passe `inputs` ici
         modules = [
-          ./configuration.nix  # ← Pas besoin d'importer avec `{ inherit inputs; }`, ça se fait via `specialArgs`
+          ./configuration.nix  # Laisse l'importation comme ça, specialArgs s'en charge
         ];
       };
     };

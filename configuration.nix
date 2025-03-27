@@ -75,6 +75,7 @@
       discord
       filezilla
       git
+      inputs.nixpkgs-stable.pkgs.vscode # Utilisation de la version stable de VS Code
     ];
   };
 
