@@ -72,7 +72,6 @@
     packages = with pkgs; [
       kdePackages.kate
       spotify
-      vscode
       discord
       filezilla
       git

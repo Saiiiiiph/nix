@@ -10,13 +10,15 @@
     nixosConfigurations = {
       nixos = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
+        specialArgs = { inherit inputs; };  # ✅ Passe `inputs` aux modules
         modules = [
+          ./hardware-configuration.nix
           ({ pkgs, ... }: {
             environment.systemPackages = [
               (import nixpkgs-stable { system = "x86_64-linux"; }).vscode
             ];
           })
-          (import ./configuration.nix { inherit inputs; })  # <-- Passer `inputs` ici
+          ./configuration.nix  # ✅ Appelle le fichier directement
         ];
       };
     };
