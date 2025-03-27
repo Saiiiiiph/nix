@@ -75,7 +75,7 @@
       discord
       filezilla
       git
-      inputs.nixpkgs-stable.pkgs.vscode # Utilisation de la version stable de VS Code
+      stable.vscode  # Maintenant disponible via l'overlay
     ];
   };
 
@@ -106,7 +106,7 @@
 
   # MAJ autoLogin
   system.autoUpgrade = {
-    enable = true;
+    enable = false;
     flake = inputs.self.outPath; # Correction : inputs est maintenant défini
     flags = [ "--update-input" "nixpkgs" "-L" ];
     dates = "02:00"; # Heure à laquelle la mise à jour sera tentée (ici, 2h00 du matin)
