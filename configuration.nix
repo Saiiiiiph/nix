@@ -1,5 +1,7 @@
 { config, pkgs, lib, modulesPath, inputs, ... }:
 
+assert inputs != null;  # Vérifie que `inputs` est bien reçu
+
 {
   imports = [
     ./hardware-configuration.nix
