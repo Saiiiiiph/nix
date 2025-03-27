@@ -1,4 +1,4 @@
-{ config, pkgs, lib, modulesPath, ... }:
+{ config, pkgs, lib, modulesPath, inputs, ... }:
 
 {
   imports = [
@@ -107,7 +107,7 @@
   # MAJ autoLogin
   system.autoUpgrade = {
     enable = true;
-    flake = inputs.self.outPath;
+    flake = inputs.self.outPath; # Correction : inputs est maintenant défini
     flags = [ "--update-input" "nixpkgs" "-L" ];
     dates = "02:00"; # Heure à laquelle la mise à jour sera tentée (ici, 2h00 du matin)
     randomizedDelaySec = "45min"; # Délai aléatoire pour éviter que tous les systèmes ne se mettent à jour en même temps
