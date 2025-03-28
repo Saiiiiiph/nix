@@ -61,6 +61,9 @@
       stable.filezilla
       git
       vscode
+      catppuccin-kde
+
+      #Vivaldi custom KDE
       (vivaldi.overrideAttrs (old: {
         dontWrapQtApps = false;
         dontPatchELF = true;
