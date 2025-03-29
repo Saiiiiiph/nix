@@ -62,7 +62,6 @@
       git
       vscode
       catppuccin-kde
-
       #Vivaldi custom KDE
       (vivaldi.overrideAttrs (old: {
         dontWrapQtApps = false;
@@ -80,15 +79,29 @@
   programs.firefox.enable = true;
   # Installer Steam
   programs.steam.enable = true;
+  programs.steam.gamescopeSession.enable = true;
+  # Jeux et outils gaming
+  programs.gamemode.enable = true;
+  
+  # Variables d'environnement
+  environment.sessionVariables = {
+    STEAM_EXTRA_COMPAT_TOOLS_PATHS = "\${HOME}/.steam/root/compatibilitytools.d";
+  };
+  
   # Autoriser les paquets non libres
   nixpkgs.config.allowUnfree = true;
-  # Ajouter des paquets globaux si besoin
+  
+  # Ajouter des paquets globaux
   environment.systemPackages = with pkgs; [
-    # vim  # Décommente si tu veux ajouter Vim
+    mangohud
+    protonup
+    # vim # Décommente si tu veux ajouter Vim
     # wget
   ];
+  
   # Activer les flakes et Nix command
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  
   # Version de l'état du système (ne pas modifier après installation)
   system.stateVersion = "24.11";
 }
