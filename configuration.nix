@@ -3,45 +3,40 @@
   imports = [
     ./hardware-configuration.nix
   ];
+
   # Bootloader
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+
   # Nom de la machine
   networking.hostName = "nixos";
-  # Wireguard
   networking.firewall.checkReversePath = false;
-  # Activer le réseau
   networking.networkmanager.enable = true;
-  # Configuration du fuseau horaire
+
+  # Fuseau horaire et localisation
   time.timeZone = "Europe/Paris";
-  # Configuration de la localisation
   i18n.defaultLocale = "fr_FR.UTF-8";
   i18n.extraLocaleSettings = {
-    LC_ADDRESS = "fr_FR.UTF-8";
-    LC_IDENTIFICATION = "fr_FR.UTF-8";
-    LC_MEASUREMENT = "fr_FR.UTF-8";
-    LC_MONETARY = "fr_FR.UTF-8";
-    LC_NAME = "fr_FR.UTF-8";
-    LC_NUMERIC = "fr_FR.UTF-8";
-    LC_PAPER = "fr_FR.UTF-8";
-    LC_TELEPHONE = "fr_FR.UTF-8";
-    LC_TIME = "fr_FR.UTF-8";
+    LC_ALL = "fr_FR.UTF-8";
   };
-  # Activer le serveur X11
+
+  # Activer le serveur X11 et KDE Plasma 6
   services.xserver.enable = true;
-  # Activer KDE Plasma 6
   services.displayManager.sddm.enable = true;
   services.desktopManager.plasma6.enable = true;
-  # Configuration du clavier
+
+  # Clavier
   services.xserver.xkb = {
     layout = "fr";
     variant = "";
   };
   console.keyMap = "fr";
-  # Activer l'impression
+
+  # Impression
   services.printing.enable = true;
-  # Configuration du son avec PipeWire
-  hardware.pulseaudio.enable = false;
+
+  # Son avec PipeWire
+  services.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
@@ -49,7 +44,35 @@
     alsa.support32Bit = true;
     pulse.enable = true;
   };
-  # Création de l'utilisateur "saiph"
+
+  # OpenGL & Vulkan optimisé
+  hardware.graphics = {
+    enable = true;
+    extraPackages = with pkgs; [
+      amdvlk # Pilote Vulkan AMD optimisé
+      vulkan-tools
+      vulkan-loader
+      vulkan-validation-layers
+      libva
+      libvdpau
+    ];
+  };
+
+  # Optimisation CPU
+  powerManagement.cpuFreqGovernor = "performance";
+  systemd.services.turbo-boost.enable = false;
+  
+  # Optimisation pour le gaming
+  programs.gamemode.enable = true;
+  programs.gamescope.enable = true;
+  environment.variables = {
+    MANGOHUD = "1";
+    RADV_PERFTEST = "aco";
+    VK_ICD_FILENAMES = "/run/opengl-driver/etc/vulkan/icd.d/radeon_icd.x86_64.json:/run/opengl-driver-32/etc/vulkan/icd.d/radeon_icd.i686.json";
+    VK_LAYER_PATH = "/run/opengl-driver/etc/vulkan/explicit_layer.d:/run/opengl-driver-32/etc/vulkan/explicit_layer.d";
+  };
+
+  # Utilisateur
   users.users.saiph = {
     isNormalUser = true;
     description = "saiph";
@@ -62,7 +85,6 @@
       git
       vscode
       catppuccin-kde
-      #Vivaldi custom KDE
       (vivaldi.overrideAttrs (old: {
         dontWrapQtApps = false;
         dontPatchELF = true;
@@ -72,36 +94,32 @@
       }))
     ];
   };
-  # Connexion automatique de l'utilisateur
-  services.xserver.displayManager.autoLogin.enable = true;
-  services.xserver.displayManager.autoLogin.user = "saiph";
-  # Installer Firefox
-  programs.firefox.enable = true;
-  # Installer Steam
-  programs.steam.enable = true;
-  programs.steam.gamescopeSession.enable = true;
-  # Jeux et outils gaming
-  programs.gamemode.enable = true;
-  
-  # Variables d'environnement
-  environment.sessionVariables = {
-    STEAM_EXTRA_COMPAT_TOOLS_PATHS = "\${HOME}/.steam/root/compatibilitytools.d";
+
+  # Connexion automatique
+  services.displayManager.autoLogin.enable = true;
+  services.displayManager.autoLogin.user = "saiph";
+
+  # Steam & Proton
+  programs.steam = {
+    enable = true;
+    gamescopeSession.enable = true;
   };
-  
+
   # Autoriser les paquets non libres
   nixpkgs.config.allowUnfree = true;
-  
-  # Ajouter des paquets globaux
+  nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [ "steam" "steam-unwrapped" ];
+
+  # Paquets globaux
   environment.systemPackages = with pkgs; [
     mangohud
     protonup
-    # vim # Décommente si tu veux ajouter Vim
-    # wget
+    steam-run
+    vulkan-tools
   ];
-  
+
   # Activer les flakes et Nix command
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
-  
-  # Version de l'état du système (ne pas modifier après installation)
+
+  # Version de l'état du système
   system.stateVersion = "24.11";
 }
