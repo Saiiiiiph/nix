@@ -78,13 +78,13 @@
     description = "saiph";
     extraGroups = [ "networkmanager" "wheel" ];
     packages = with pkgs; [
-      kdePackages.kate
       spotify
       discord
-      stable.filezilla
+      filezilla
       git
       vscode
-      catppuccin-kde
+      firefox
+      brave
       (vivaldi.overrideAttrs (old: {
         dontWrapQtApps = false;
         dontPatchELF = true;
